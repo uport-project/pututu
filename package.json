@@ -1,0 +1,56 @@
+{
+  "name": "pututu",
+  "version": "1.0.0",
+  "description": "uPort Push notification server",
+  "main": "dist",
+  "scripts": {
+    "dev": "NODE_ENV=dev nodemon -w src --exec \"babel-node src --presets es2015,stage-0\"",
+    "build": "babel src -s -D -d dist --presets es2015,stage-0",
+    "start": "node dist",
+    "prestart": "npm run -s build",
+    "test": "mocha --compilers js:babel-core/register --timeout 10000",
+    "style": "eslint src && standard"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 7,
+      "sourceType": "module"
+    },
+    "env": {
+      "node": true
+    },
+    "rules": {
+      "no-console": 0,
+      "no-unused-vars": 1
+    }
+  },
+  "repository": "Consensys/pututu",
+  "author": "Andres Junge <andres.junge@consensys.net>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "compression": "^1.5.2",
+    "config": "^1.24.0",
+    "cors": "^2.7.1",
+    "express": "^4.13.3",
+    "express-request-id": "^1.4.0",
+    "jsontokens": "^0.7.6",
+    "log4js": "^1.1.1",
+    "sns-mobile": "^1.3.0",
+    "uport-lite": "0.2.2",
+    "url-parse": "^1.1.7"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-core": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.1.1",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.9.2",
+    "standard": "^8.6.0"
+  }
+}
