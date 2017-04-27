@@ -131,12 +131,14 @@ export default () => {
 
         // Check if customUserData == req.authorization.iss on AuthToken
         //console.log('req.authorization.iss:' + req.authorization.iss)
+        /*
         if (customUserData !== req.authorization.iss) {
           let err = {authorization: 'token not signed by endpointArn user'}
           logData.err=err;
           log.warn(JSON.stringify(logData))
           return res.status(400).json({status: 'fail', data: err})
         }
+        */
 
         // Message in all formats/for all platforms
         const senderId = req.authorization.aud
@@ -166,7 +168,14 @@ export default () => {
               data: {
                 message: message,
                 url: url,
-                clientId: senderId
+                clientId: senderId,
+                custom_notification: {
+                  body: message,
+                  title: "uPort",
+                  url: url,
+                  clientId: senderId,
+                  icon: "notification_icon"
+                }
               }
             }
           )
