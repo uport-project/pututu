@@ -1,6 +1,6 @@
 {
   "name": "pututu",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "uPort Push notification server",
   "main": "dist",
   "scripts": {
