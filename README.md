@@ -63,4 +63,4 @@ Authorization: Bearer <jwt token>
 ```
 ### Sequence Diagram
 
-![Sns Seq](./diagrams/img/sns.seq.png)
+![Sns Seq](./diagrams/img/api-v1.sns.seq.png)

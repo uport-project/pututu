@@ -2,12 +2,12 @@
 
 #### Contents
 
-- [Sns Seq](#sns-seq)
+- [Api V 1 Sns Seq](#api-v-1-sns-seq)
 - [How to write diagrams](#how-to-write-diagrams)
 - [How to generate diagrams](#how-to-generate-diagrams)
 
-#### Sns Seq
-![Sns Seq](./img/sns.seq.png)
+#### Api V 1 Sns Seq
+![Api V 1 Sns Seq](./img/api-v1.sns.seq.png)
 
 #### How to write diagrams
 
