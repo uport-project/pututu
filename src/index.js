@@ -4,6 +4,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import middleware from './middleware'
 import apiV1 from './api-v1'
+import apiV2 from './api-v2'
 
 import config from 'config'
 import expressRequestId from 'express-request-id'
@@ -47,6 +48,7 @@ app.use(middleware())
 
 // api router
 app.use('/api/v1', apiV1())
+app.use('/api/v2', apiV2())
 
 app.server.listen(process.env.PORT || config.get('port'))
 

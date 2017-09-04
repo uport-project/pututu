@@ -3,6 +3,7 @@ participant "dApp" as dApp
 participant "uPort Mobile App" as uPort
 participant "uPort::pututu" as pututu
 participant "AWS::SNS" as sns
+database "PostgresSQL" as db
 
 
 dApp -> pututu: Send Message\nPOST /api/v1/sns
@@ -20,8 +21,7 @@ Authorization: Bearer <jwt token>
 end note
 note left of pututu
 {
-  url: <uport url>,
-  message: <message>
+  message: <<encrypted message>>
 }
 end note
 activate pututu
@@ -30,15 +30,30 @@ activate pututu
 pututu -> pututu: Check token
 pututu -> sns: getUser(<arn>)
 pututu -> pututu: Check token.aud == userData
-pututu -> pututu: Parse url
-pututu -> sns: Send Message
+
+pututu -> db: Store Encrypted message
+
+pututu -> sns: Send Notification Message
 activate sns
-sns -> pututu: Ok. <message-id>
-sns -> uPort: Push Message
+sns -> pututu: Ok. <sns-message-id>
+sns -> uPort: Push Notification Message
 deactivate sns
 
-dApp <- pututu: 200 OK: <message-id>
+dApp <- pututu: 200 OK: <sns-message-id>
 deactivate pututu
 
+
+uPort -> pututu: Retrieve Message\nGET /api/v2/message/<messageId>
+activate pututu
+pututu -> db: Get Message
+pututu -> uPort: 200 OK: <Retrieved message>
+deactivate pututu
+
+
+uPort -> pututu: Delete Message\nDELETE /api/v2/message/<messageId>
+activate pututu
+pututu -> db: Delete Message
+pututu -> uPort: 200: OK
+deactivate pututu
 
 @enduml

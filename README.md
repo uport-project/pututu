@@ -34,7 +34,7 @@ The format of the payload of the "notification token" is
 
 ### Headers
 ```
-Authorization: Bearer <jwt token>
+Authorization: Bearer <notification token>
 ```
 ### Body
 ```
@@ -64,3 +64,39 @@ Authorization: Bearer <jwt token>
 ### Sequence Diagram
 
 ![Sns Seq](./diagrams/img/api-v1.sns.seq.png)
+
+### Endpoint
+
+`POST /api/v2/sns`
+
+### Headers
+```
+Authorization: Bearer <jwt token>
+```
+### Body
+```
+{
+  message: <encrypted message>
+}
+```
+
+#### Response
+
+| Status |     Message    |                               |
+|:------:|----------------|-------------------------------|
+| 200    | Ok             | Message Send                   |
+| 400    | Fail           | endpointArn not supported     |
+| 400    | Fail           | token not signed by endpointArn user |
+| 403    | Forbidden      | JWT token missing or invalid  |
+| 500    | Internal Error | Internal error                |
+
+#### Response data
+```
+{
+  status: 'success',
+  message: <messageId>
+}
+```
+### Sequence Diagram
+
+![Sns Seq](./diagrams/img/api-v2.sns.seq.png)

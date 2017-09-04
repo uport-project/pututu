@@ -2,12 +2,11 @@ import { Router } from 'express'
 import BodyParser from 'body-parser'
 import SNS from 'sns-mobile'
 import config from 'config'
-import uportUri from '../lib/uport-uri.js'
 import log4js from 'log4js'
-
+import sha3 from 'solidity-sha3'
 
 export default () => {
-  let log = log4js.getLogger('pututu.api-v1.sns');
+  let log = log4js.getLogger('pututu.api-v2.sns');
   log.setLevel('INFO');
 
   let api = Router()
@@ -141,11 +140,20 @@ export default () => {
         */
 
         // Message in all formats/for all platforms
+        const encmessage = req.body.message
         const senderId = req.authorization.aud
-        const senderName = req.authorization.audName || `${req.authorization.aud.slice(12)}..`
+        const recipientId = req.authorization.iss
 
-        const url = req.body.url
-        const message = req.body.message || `${senderName} ${uportUri.parse(url)}`
+        const messageHash = sha3(senderId+":"+recipientId+":"+encmessage).slice(2)
+
+        //Store in PostgresSQL
+        // (messageHash,senderId,recipientId,message)
+        console.log(messageHash);
+
+
+        const url = "https://pututu.uport.me/api/v2/"+messageHash
+        const message = "new encrypted message at: "+url
+
 
         const apnStr = JSON.stringify(
           {
@@ -166,7 +174,6 @@ export default () => {
           "GCM": JSON.stringify(
             {
               data: {
-                message: message,
                 url: url,
                 clientId: senderId,
                 custom_notification: {
@@ -208,6 +215,7 @@ export default () => {
       })
     }
   })
+
 
   return api
 }
