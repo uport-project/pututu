@@ -3,6 +3,13 @@ participant "uPort Mobile App" as uPort
 participant "uPort::pututu" as pututu
 database "PostgresSQL" as db
 
+uPort -> pututu: Retrieve Message\nGET /api/v2/message/
+activate pututu
+pututu -> db: Find Messages by Recipient
+pututu -> uPort: 200 OK: <Retrieved messages>
+deactivate pututu
+
+
 uPort -> pututu: Retrieve Message\nGET /api/v2/message/<messageId>
 activate pututu
 pututu -> db: Get Message
