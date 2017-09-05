@@ -8,6 +8,7 @@ CREATE TABLE public.messages
   sender character varying(66) NOT NULL, -- Sender
   recipient character varying(66) NOT NULL, -- Recipient
   message text NOT NULL, -- Message
+  created timestamp with time zone  NOT NULL DEFAULT now(), --Created on
   CONSTRAINT messages_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -19,6 +20,7 @@ COMMENT ON COLUMN public.messages.id IS 'Identifier';
 COMMENT ON COLUMN public.messages.sender IS 'Sender';
 COMMENT ON COLUMN public.messages.recipient IS 'Recipient';
 COMMENT ON COLUMN public.messages.message IS 'Message';
+COMMENT ON COLUMN public.messages.created IS 'Created on';
 
 
 -- Index: public.recipient_idx
