@@ -26,9 +26,15 @@ export default () => {
       }
       log.warn(JSON.stringify(resp))
       res.status(403).json(resp)
+    } else if (1==0 && req.authorization.type !== 'user-auth') {
+      let resp = {
+        status: 'fail',
+        data: {authorization: 'type is not user-auth'}
+      }
+      log.warn(JSON.stringify(resp))
+      res.status(403).json(resp)
     } else {
-      //let recipientId=req.authorization.iss
-      let recipientId='2ormzvNA16Ci4KZukBngtaMfoc3GTnhuYhE';
+      let recipientId=req.authorization.iss
 
       messageModel.get(messageId, (err,rs) =>{
         if (err) {
@@ -68,9 +74,15 @@ export default () => {
       }
       log.warn(JSON.stringify(resp))
       res.status(403).json(resp)
+    } else if (1==0 && req.authorization.type !== 'user-auth') {
+      let resp = {
+        status: 'fail',
+        data: {authorization: 'type is not user-auth'}
+      }
+      log.warn(JSON.stringify(resp))
+      res.status(403).json(resp)
     } else {
-      //let recipientId=req.authorization.iss
-      let recipientId='2ormzvNA16Ci4KZukBngtaMfoc3GTnhuYhE';
+      let recipientId=req.authorization.iss
 
       messageModel.findByRecipient(recipientId, (err,rs) =>{
         if (err) {
@@ -101,10 +113,16 @@ export default () => {
       }
       log.warn(JSON.stringify(resp))
       res.status(403).json(resp)
+    } else if (1==0 && req.authorization.type !== 'user-auth') {
+      let resp = {
+        status: 'fail',
+        data: {authorization: 'type is not user-auth'}
+      }
+      log.warn(JSON.stringify(resp))
+      res.status(403).json(resp)
     } else {
-      //let recipientId=req.authorization.iss
-      let recipientId='2ormzvNA16Ci4KZukBngtaMfoc3GTnhuYhE';
-
+      let recipientId=req.authorization.iss
+      
       messageModel.delete(messageId, recipientId, (err,rs) =>{
         if (err) {
           logData.err=err;

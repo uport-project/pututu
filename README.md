@@ -65,6 +65,13 @@ Authorization: Bearer <notification token>
 
 ![Sns Seq](./diagrams/img/api-v1.sns.seq.png)
 
+### Push notifications for encrypted messages
+
+Pututu receive, store and notify about encrypted messages to any registered uport mobile app.
+The consumer of the API needs to present a "notification token" (JWT) issued
+by the uport user. (same as above)
+
+
 ### Endpoint
 
 `POST /api/v2/sns`

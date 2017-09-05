@@ -154,8 +154,7 @@ export default () => {
             log.error(JSON.stringify(logData));
             return res.status(500).json({status: 'error', message: err.toString()})
           }
-          const url = "https://pututu.uport.me/api/v2/"+messageHash
-          const message = "new encrypted message at: "+url
+          const message = "New secure message"
 
 
           const apnStr = JSON.stringify(
@@ -164,7 +163,6 @@ export default () => {
                 "content-available": 1
               },
               uport: {
-                url: url,
                 clientId: senderId
               }
             }
@@ -177,12 +175,10 @@ export default () => {
             "GCM": JSON.stringify(
               {
                 data: {
-                  url: url,
                   clientId: senderId,
                   custom_notification: {
                     body: message,
                     title: "uPort",
-                    url: url,
                     clientId: senderId,
                     icon: "notification_icon"
                   }
