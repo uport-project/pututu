@@ -5,5 +5,5 @@
 	"ANDROID_ARN"    : "arn:aws:sns:us-west-2:113196216558:app/GCM/uPort",
 	"IOS_ARN"        : "arn:aws:sns:us-west-2:113196216558:app/APNS/uPort",
 	"IOS_SANDBOX_ARN": "arn:aws:sns:us-west-2:113196216558:app/APNS_SANDBOX/uPort",
-	"PG_DEBUG"			 : true
+	"PG_DEBUG"			 : false
 }
