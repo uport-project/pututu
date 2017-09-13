@@ -2,12 +2,12 @@ import { Router } from 'express'
 import BodyParser from 'body-parser'
 import SNS from 'sns-mobile'
 import config from 'config'
-import uportUri from '../lib/uport-uri.js'
 import log4js from 'log4js'
-
+import sha3 from 'solidity-sha3'
+import messageModel from '../models/message'
 
 export default () => {
-  let log = log4js.getLogger('pututu.api.sns');
+  let log = log4js.getLogger('pututu.api-v2.sns');
   log.setLevel('INFO');
 
   let api = Router()
@@ -141,73 +141,86 @@ export default () => {
         */
 
         // Message in all formats/for all platforms
+        const encmessage = req.body.message
         const senderId = req.authorization.aud
-        const senderName = req.authorization.audName || `${req.authorization.aud.slice(12)}..`
+        const recipientId = req.authorization.iss
 
-        const url = req.body.url
-        const message = req.body.message || `${senderName} ${uportUri.parse(url)}`
+        const messageHash = sha3(senderId+":"+recipientId+":"+encmessage+":"+Date.now()).slice(2)
 
-        const apnStr = JSON.stringify(
-          {
-            aps: {
-              "content-available": 1
-            },
-            uport: {
-              url: url,
-              clientId: senderId
-            }
-          }
-        )
-
-        const payload = {
-          "default": message,
-          "APNS": apnStr,
-          "APNS_SANDBOX": apnStr,
-          "GCM": JSON.stringify(
-            {
-              data: {
-                message: message,
-                url: url,
-                clientId: senderId,
-                custom_notification: {
-                  body: message,
-                  title: "uPort",
-                  url: url,
-                  clientId: senderId,
-                  icon: "notification_icon"
-                }
-              }
-            }
-          )
-        }
-
-        logData.payload=payload;
-        /*
-            APNS_SANDBOX:{  aps:{   alert: msg } },
-            let message = {
-            default: msg,
-            APNS        :{  aps:{   alert: msg } },
-            GCM         :{ data:{ message: msg } }
-        }
-        let message = {
-            default: msg
-        }
-        */
-
-        app.sendMessage(fullArn, payload, (err, messageId) => {
+        //Store in PostgresSQL
+        messageModel.add(messageHash,senderId,recipientId,encmessage, (err,rs) => {
           if (err) {
             logData.err=err;
             log.error(JSON.stringify(logData));
-            return res.status(500).json({status: 'error', data: err})
-          } else {
-            logData.messageId=messageId;
-            log.info(JSON.stringify(logData));
-            return res.json({status: 'success', message: messageId})
+            return res.status(500).json({status: 'error', message: err.toString()})
           }
+          const message = "New secure message"
+
+
+          const apnStr = JSON.stringify(
+            {
+              aps: {
+                "content-available": 1
+              },
+              uport: {
+                clientId: senderId
+              }
+            }
+          )
+
+          const payload = {
+            "default": message,
+            "APNS": apnStr,
+            "APNS_SANDBOX": apnStr,
+            "GCM": JSON.stringify(
+              {
+                data: {
+                  clientId: senderId,
+                  custom_notification: {
+                    body: message,
+                    title: "uPort",
+                    clientId: senderId,
+                    icon: "notification_icon"
+                  }
+                }
+              }
+            )
+          }
+
+          logData.payload=payload;
+          /*
+              APNS_SANDBOX:{  aps:{   alert: msg } },
+              let message = {
+              default: msg,
+              APNS        :{  aps:{   alert: msg } },
+              GCM         :{ data:{ message: msg } }
+          }
+          let message = {
+              default: msg
+          }
+          */
+
+          app.sendMessage(fullArn, payload, (err, messageId) => {
+            if (err) {
+              logData.err=err;
+              log.error(JSON.stringify(logData));
+              return res.status(500).json({status: 'error', data: err})
+            } else {
+              logData.messageId=messageId;
+              log.info(JSON.stringify(logData));
+              return res.json({status: 'success', message: messageId})
+            }
+          })
         })
-      })
+
+
+
+        })
+
+
     }
   })
+
 
   return api
 }
