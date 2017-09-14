@@ -6,7 +6,7 @@ import messageModel from '../models/message'
 
 
 export default () => {
-  let log = log4js.getLogger('pututu.api-v2.sns');
+  let log = log4js.getLogger('pututu.api-v2.message');
   log.setLevel('INFO');
 
   let api = Router()
@@ -122,7 +122,7 @@ export default () => {
       res.status(403).json(resp)
     } else {
       let recipientId=req.authorization.iss
-      
+
       messageModel.delete(messageId, recipientId, (err,rs) =>{
         if (err) {
           logData.err=err;
