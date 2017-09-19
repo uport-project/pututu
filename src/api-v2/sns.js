@@ -163,7 +163,8 @@ export default () => {
                 "content-available": 1
               },
               uport: {
-                clientId: senderId
+                clientId: senderId,
+                messageHash: messageHash
               }
             }
           )
@@ -176,6 +177,7 @@ export default () => {
               {
                 data: {
                   clientId: senderId,
+                  messageHash: messageHash,
                   custom_notification: {
                     body: message,
                     title: "uPort",
