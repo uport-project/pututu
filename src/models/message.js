@@ -26,4 +26,8 @@ module.exports = {
     pgModel._delete(this.tableName,where,callback)
   },
 
+  countByRecipient(recipientId,callback){
+    pgModel._count(this.tableName,"recipient='"+recipientId+"'",callback)
+  },
+
 }

@@ -70,6 +70,19 @@ module.exports = {
         callback(null,res)
       }
     })
-  }
+  },
+
+  _count(table, where, callback){
+    this._log('counting:'+table+" :: "+where)
+    let sql="SELECT count(*) as num FROM "+table+" WHERE "+where;
+    this._log(sql);
+    this._getPool().query(sql, (err, res) => {
+      if (err) {
+        callback(err)
+      }else{
+        callback(null,res)
+      }
+    })
+  },
 
 }

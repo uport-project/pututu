@@ -156,64 +156,72 @@ export default () => {
           }
           const message = "New secure message"
 
+          messageModel.countByRecipient(recipientId, (err,rs) => {
+            let count=parseInt(rs.rows[0].num)
+            console.log(count)
 
-          const apnStr = JSON.stringify(
-            {
-              aps: {
-                "content-available": 1
-              },
-              uport: {
-                clientId: senderId,
-                messageHash: messageHash
-              }
-            }
-          )
-
-          const payload = {
-            "default": message,
-            "APNS": apnStr,
-            "APNS_SANDBOX": apnStr,
-            "GCM": JSON.stringify(
+            const apnStr = JSON.stringify(
               {
-                data: {
+                aps: {
+                  "alert": message,
+                  "badge": count
+                },
+                uport: {
                   clientId: senderId,
-                  messageHash: messageHash,
-                  custom_notification: {
-                    body: message,
-                    title: "uPort",
-                    clientId: senderId,
-                    icon: "notification_icon"
-                  }
+                  messageHash: messageHash
                 }
               }
             )
-          }
 
-          logData.payload=payload;
-          /*
-              APNS_SANDBOX:{  aps:{   alert: msg } },
-              let message = {
-              default: msg,
-              APNS        :{  aps:{   alert: msg } },
-              GCM         :{ data:{ message: msg } }
-          }
-          let message = {
-              default: msg
-          }
-          */
-
-          app.sendMessage(fullArn, payload, (err, messageId) => {
-            if (err) {
-              logData.err=err;
-              log.error(JSON.stringify(logData));
-              return res.status(500).json({status: 'error', data: err})
-            } else {
-              logData.messageId=messageId;
-              log.info(JSON.stringify(logData));
-              return res.json({status: 'success', message: messageId})
+            const payload = {
+              "default": message,
+              "APNS": apnStr,
+              "APNS_SANDBOX": apnStr,
+              "GCM": JSON.stringify(
+                {
+                  data: {
+                    clientId: senderId,
+                    messageHash: messageHash,
+                    custom_notification: {
+                      body: message,
+                      title: "uPort",
+                      clientId: senderId,
+                      icon: "notification_icon"
+                    }
+                  }
+                }
+              )
             }
+
+            logData.payload=payload;
+            /*
+                APNS_SANDBOX:{  aps:{   alert: msg } },
+                let message = {
+                default: msg,
+                APNS        :{  aps:{   alert: msg } },
+                GCM         :{ data:{ message: msg } }
+            }
+            let message = {
+                default: msg
+            }
+            */
+
+            app.sendMessage(fullArn, payload, (err, messageId) => {
+              if (err) {
+                logData.err=err;
+                log.error(JSON.stringify(logData));
+                return res.status(500).json({status: 'error', data: err})
+              } else {
+                logData.messageId=messageId;
+                log.info(JSON.stringify(logData));
+                return res.json({status: 'success', message: messageId})
+              }
+            })
           })
-        })
+
+
+          })
+
 
 
 
