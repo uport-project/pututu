@@ -7,7 +7,7 @@ import log4js from 'log4js'
 
 
 export default () => {
-  let log = log4js.getLogger('pututu.api.sns');
+  let log = log4js.getLogger('pututu.api-v1.sns');
   log.setLevel('INFO');
 
   let api = Router()

@@ -104,18 +104,26 @@ function JwtDecode (req, res, next) {
         log.error(JSON.stringify(logData));
         return res.status(500).json(err);
       } else {
-        //Search for aud data
-        registry(dtoken.payload.aud , (audErr, audProfile) =>{
-          if(!audErr){
-            dtoken.payload.audName=audProfile.name;
-          }else{
-            let err="ERROR trying to get profile for aud:"+dtoken.payload.aud;
-            logData.err=err;
-            log.error(JSON.stringify(logData));
-          }
+        if(dtoken.payload.aud){
+
+          //Search for aud data
+          registry(dtoken.payload.aud , (audErr, audProfile) =>{
+            if(!audErr){
+              dtoken.payload.audName=audProfile.name;
+            }else{
+              let err="ERROR trying to get profile for aud:"+dtoken.payload.aud;
+              logData.err=err;
+              log.error(JSON.stringify(logData));
+            }
+            req.authorization = dtoken.payload
+            return next()
+          })
+
+        }else{
           req.authorization = dtoken.payload
           return next()
-        })
+        }
+
 
       }
 
