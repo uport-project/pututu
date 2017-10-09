@@ -2,6 +2,8 @@ import { decodeToken, TokenVerifier } from 'jsontokens'
 import UportLite from 'uport-lite'
 import log4js from 'log4js'
 
+const LEGACY_MS = 1000000000000
+
 function JwtDecode (req, res, next) {
   let token
   let log = log4js.getLogger('pututu.middleware.jwt');
@@ -60,7 +62,8 @@ function JwtDecode (req, res, next) {
     logData.dtoken=dtoken;
 
     //Check issuedAt
-    if (dtoken.payload.iat && dtoken.payload.iat > new Date().getTime()) {
+    if (dtoken.payload.iat && ((dtoken.payload.iat >=LEGACY_MS && dtoken.payload.iat > Date.now()) ||
+                               (dtoken.payload.iat < LEGACY_MS && dtoken.payload.iat > Date.now() / 1000))) {
       //console.log("JWT issued in the future?. JWT:"+dtoken.payload.exp+" Now:"+new Date().getTime())
       let err={ message: 'JWT not valid yet (issued in the future)'}
       logData.err=err;
@@ -69,7 +72,8 @@ function JwtDecode (req, res, next) {
     }
 
     //Check expireAt
-    if (dtoken.payload.exp && dtoken.payload.exp <= new Date().getTime()) {
+    if (dtoken.payload.exp && ((dtoken.payload.exp >=LEGACY_MS && dtoken.payload.exp <= Date.now()) ||
+                               (dtoken.payload.iat < LEGACY_MS && dtoken.payload.exp <= Date.now() / 1000))) {
       //console.log("JWT expired. JWT:"+dtoken.payload.exp+" Now:"+new Date().getTime())
       let err={ message: 'JWT has expired'}
       logData.err=err;
