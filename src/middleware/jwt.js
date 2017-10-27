@@ -3,6 +3,7 @@ import UportLite from 'uport-lite'
 import log4js from 'log4js'
 
 const LEGACY_MS = 1000000000000
+const IAT_SKEW = 60
 
 function JwtDecode (req, res, next) {
   let token
@@ -62,10 +63,10 @@ function JwtDecode (req, res, next) {
     logData.dtoken=dtoken;
 
     //Check issuedAt
-    if (dtoken.payload.iat && ((dtoken.payload.iat >=LEGACY_MS && dtoken.payload.iat > Date.now()) ||
-                               (dtoken.payload.iat < LEGACY_MS && dtoken.payload.iat > Date.now() / 1000))) {
+    if (dtoken.payload.iat && ((dtoken.payload.iat >=LEGACY_MS && dtoken.payload.iat > Date.now() + IAT_SKEW) ||
+                               (dtoken.payload.iat < LEGACY_MS && dtoken.payload.iat > Date.now() / 1000 + IAT_SKEW))) {
       //console.log("JWT issued in the future?. JWT:"+dtoken.payload.exp+" Now:"+new Date().getTime())
-      let err={ message: 'JWT not valid yet (issued in the future)'}
+      let err = { message: `JWT not valid yet (issued in the future) : iat: ${dtoken.payload.iat} > now: ${Date.now() / 1000}`}
       logData.err=err;
       log.error(JSON.stringify(logData));
       return res.status(403).json(err)
@@ -75,7 +76,7 @@ function JwtDecode (req, res, next) {
     if (dtoken.payload.exp && ((dtoken.payload.exp >=LEGACY_MS && dtoken.payload.exp <= Date.now()) ||
                                (dtoken.payload.iat < LEGACY_MS && dtoken.payload.exp <= Date.now() / 1000))) {
       //console.log("JWT expired. JWT:"+dtoken.payload.exp+" Now:"+new Date().getTime())
-      let err={ message: 'JWT has expired'}
+      let err = { message: `JWT has expired: exp: ${dtoken.payload.exp} < now: ${Date.now() / 1000}`}
       logData.err=err;
       log.error(JSON.stringify(logData));
       return res.status(403).json(err)
