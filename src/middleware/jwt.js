@@ -63,7 +63,7 @@ function JwtDecode (req, res, next) {
     logData.dtoken=dtoken;
 
     //Check issuedAt
-    if (dtoken.payload.iat && ((dtoken.payload.iat >=LEGACY_MS && dtoken.payload.iat > Date.now() + IAT_SKEW) ||
+    if (dtoken.payload.iat && ((dtoken.payload.iat >=LEGACY_MS && dtoken.payload.iat > Date.now() + (IAT_SKEW*1000)) ||
                                (dtoken.payload.iat < LEGACY_MS && dtoken.payload.iat > Date.now() / 1000 + IAT_SKEW))) {
       //console.log("JWT issued in the future?. JWT:"+dtoken.payload.exp+" Now:"+new Date().getTime())
       let err = { message: `JWT not valid yet (issued in the future) : iat: ${dtoken.payload.iat} > now: ${Date.now() / 1000}`}
