@@ -8,7 +8,8 @@
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
     "start": "node dist",
     "prestart": "npm run -s build",
-    "test": "mocha --compilers js:babel-core/register --timeout 10000",
+    "test": "NODE_ENV=test mocha --compilers js:babel-core/register --timeout 100000",
+    "coverage": "NODE_ENV=test babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/.bin/_mocha ./test/*.js",
     "style": "eslint src && standard"
   },
   "eslintConfig": {
@@ -41,11 +42,13 @@
     "sns-mobile": "^1.3.0",
     "solidity-sha3": "^0.4.1",
     "uport-lite": "^1.0.2",
-    "url-parse": "^1.1.7"
+    "url-parse": "^1.1.7",
+    "istanbul": "^0.4.5"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
     "babel-core": "^6.9.0",
+    "babel-istanbul": "^0.12.2",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-0": "^6.5.0",
     "chai": "^3.5.0",

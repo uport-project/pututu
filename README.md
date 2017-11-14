@@ -210,3 +210,15 @@ Authorization: Bearer <jwt user-auth token>
 ### Sequence Diagram
 
 ![Sns Seq](./diagrams/img/api-v2.message.seq.png)
+
+
+### Testing
+
+The test suite can be ran as follows:
+```
+docker-compose up -d
+npm run test
+```
+This will create a `postgresql` database inside a container and link it with pututu.
+After the database is up, tests can be ran with the common `npm run test` command.
+The database will run in another port to prevent collisions with an eventual postgresql service running already.

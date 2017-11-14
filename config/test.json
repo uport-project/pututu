@@ -1,0 +1,10 @@
+{
+  "port": 3004,
+	"corsHeaders": ["Link"],
+  "SNS_KEY_ID"     : "fake",
+	"SNS_KEY_SECRET" : "fake",
+  "ANDROID_ARN"    : "arn:aws:sns:us-west-2:113196216558:app/GCM/uPort",
+	"IOS_ARN"        : "arn:aws:sns:us-west-2:113196216558:app/APNS/uPort",
+	"IOS_SANDBOX_ARN": "arn:aws:sns:us-west-2:113196216558:app/APNS_SANDBOX/uPort",
+	"PG_DEBUG"			 : true
+}

@@ -1,0 +1,20 @@
+version: '2'
+services:
+  pututu:
+    build: .
+    ports:
+    - "3004:3000"
+    environment:
+    - SNS_KEY_ID=''
+    - SNS_KEY_SECRET=''
+
+  postgres:
+    image: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - "./sql:/docker-entrypoint-initdb.d"
+    environment:
+      - POSTGRES_DB=pututu_test
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=pututu
