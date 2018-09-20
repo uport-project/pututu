@@ -11,4 +11,5 @@ RUN rm -rf /usr/src/app/node_modules && \
 
 EXPOSE 3000
 ENV PORT=3000
+RUN cd node_modules/uport-lite && npm run build:es5 && cd ../..
 CMD [ "npm", "start" ]
