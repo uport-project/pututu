@@ -114,7 +114,7 @@ function JwtDecode (req, res, next) {
       console.log(issProfile)
       console.log(typeof (issProfile))
       console.log(registryErr)
-      if (Object.keys(registryErr).length > 0) {
+      if (!!registryErr && Object.keys(registryErr).length > 0) {
         logData.registryErr = registryErr
         let err = { message: 'Error getting profile' }
         logData.err = err
