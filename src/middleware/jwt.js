@@ -117,7 +117,8 @@ function JwtDecode (req, res, next) {
         log.error(JSON.stringify(logData))
         return res.status(500).json(err)
       }
-      console.log('issProfile', issProfile)
+      console.log('PROFILE')
+      console.log(issProfile)
       if (!issProfile) {
         let err = { message: 'Profile not found, unable to verify token' }
         logData.err = err
