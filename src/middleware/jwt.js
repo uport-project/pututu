@@ -132,6 +132,10 @@ function JwtDecode (req, res, next) {
       const publicKey = issProfile.publicKey.match(/^0x/)
         ? issProfile.publicKey.slice(2)
         : issProfile.publicKey
+      console.log('PUBLIC KEY')
+      console.log(publicKey)
+      console.log(publicKey.length)
+      console.log(token.split('.')[2].length)
       let verified = new TokenVerifier('ES256k', publicKey).verify(token)
 
       if (!verified) {
