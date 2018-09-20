@@ -104,7 +104,10 @@ function JwtDecode (req, res, next) {
 
     // Get profile.publicKey from uport-registry for iss and validate token signature
     // TODO: Replace with JWT.verifyJWT() from uport-project
-    const registry = UportLite({ipfsGw: "https://example-gateway.com/ipfs/ "})
+    const opts = {
+      ipfsGw: 'https://example-gateway.com/ipfs'
+    }
+    const registry = UportLite(opts)
 
     registry(dtoken.payload.iss, (registryErr, issProfile) => {
       if (Object.keys(registryErr).length > 0) {
