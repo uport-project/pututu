@@ -10,11 +10,11 @@ import config from 'config'
 import expressRequestId from 'express-request-id'
 import log4js from 'log4js'
 
-
-log4js.configure({ appenders: [ { type: "console", layout: { type: "basic" } } ] })
-var log = log4js.getLogger('pututu.index');
-log.setLevel('INFO');
-
+log4js.configure({
+  appenders: [{ type: 'console', layout: { type: 'basic' } }]
+})
+var log = log4js.getLogger('pututu.index')
+log.setLevel('INFO')
 
 let app = express()
 app.server = http.createServer(app)
@@ -25,26 +25,40 @@ app.get('/health', (req, res) => {
 })
 
 // 3rd party middleware
-app.use(cors({
-  exposedHeaders: config.get('corsHeaders')
-}))
+app.use(
+  cors({
+    exposedHeaders: config.get('corsHeaders')
+  })
+)
 
-//console.log(addRequestId);
-let addRequestId=expressRequestId();
-app.use(addRequestId);
+// console.log(addRequestId);
+let addRequestId = expressRequestId()
+app.use(addRequestId)
 
 // don't show the log when it is test
 if (config.util.getEnv('NODE_ENV') !== 'test') {
-  let format=':res[X-Request-Id] :req[X-Forwarded-For] :remote-addr ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'
-  app.use(log4js.connectLogger(log,  { level: 'auto', format: format}));
+  let format =
+    ':res[X-Request-Id] :req[X-Forwarded-For] :remote-addr ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'
+  app.use(log4js.connectLogger(log, { level: 'auto', format: format }))
 }
 
-app.use(bodyParser.json({
-  limit: config.get('bodyLimit')
-}))
+app.use(
+  bodyParser.json({
+    limit: config.get('bodyLimit')
+  })
+)
 
 // internal middleware
 app.use(middleware())
+
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  )
+  next()
+})
 
 // api router
 app.use('/api/v1', apiV1())
