@@ -110,9 +110,10 @@ function JwtDecode (req, res, next) {
     const registry = UportLite(opts)
 
     registry(dtoken.payload.iss, (registryErr, issProfile) => {
-      console.log('==========================')
-      console.log(registryErr)
+      console.log('========pututu1==================')
       console.log(issProfile)
+      console.log(typeof (issProfile))
+      console.log(registryErr)
       if (Object.keys(registryErr).length > 0) {
         logData.registryErr = registryErr
         let err = { message: 'Error getting profile' }
