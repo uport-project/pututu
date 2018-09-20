@@ -29,6 +29,8 @@
   "author": "Andres Junge <andres.junge@consensys.net>",
   "license": "MIT",
   "dependencies": {
+    "bignumber": "^1.1.0",
+    "bignumber.js": "^7.2.1",
     "body-parser": "^1.13.3",
     "compression": "^1.5.2",
     "config": "^1.24.0",
